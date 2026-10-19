@@ -12,8 +12,7 @@ const queries = [
 ];
 
 // Ampliamos la búsqueda para incluir CDMX y Edomex
-const location = "Ciudad de Mexico y Estado de Mexico, Mexico";
-
+const location = "Mexico City, Mexico";
 async function fetchJobs() {
     let allJobs = [];
 
