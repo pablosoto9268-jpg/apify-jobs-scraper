@@ -1,0 +1,39 @@
+{
+    "companyKeywords": [
+        "Mercado Libre",
+        "Amazon",
+        "Walmart",
+        "Nestlé",
+        "PepsiCo",
+        "Grupo Bimbo",
+        "Sigma Alimentos",
+        "DHL Supply Chain",
+        "Maersk",
+        "Kuehne + Nagel"
+    ],
+    "fullDescriptionHtml": false,
+    "hideRecruitingAgencies": false,
+    "includeJobsWithoutSalary": true,
+    "includeJobsWithoutYoe": true,
+    "jobTitles": [
+        "Supply Chain Manager",
+        "Head of Logistics",
+        "Head of Transportation",
+        "Head of Distribution",
+        "Senior Supply Chain",
+        "Coordinador",
+        "Hub Logistico",
+        "Operation Manager",
+        "Supply Chain Leader",
+        "Last mile",
+        "Logistics Manager",
+        "Cold Chain Manager",
+        "Food Losgistics"
+    ],
+    "locations": [
+        "Ciudad de Mexico",
+        "Estado de Mexico"
+    ],
+    "onlyNewSinceLastRun": false,
+    "postedWithinDays": 14
+}
