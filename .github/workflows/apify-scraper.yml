@@ -1,41 +1,33 @@
-name: Apify Jobs Scraper Automation
+name: Extracción Diaria de Vacantes
 
 on:
   schedule:
-    - cron: '0 8 * * 1' # Ejecución semanal (Lunes 8:00 AM)
-  workflow_dispatch: # Permite ejecución manual
+    # Se ejecuta todos los días a las 14:00 UTC (08:00 AM hora de CDMX)
+    - cron: '0 14 * * *'
+  workflow_dispatch: # Te permite ejecutarlo manualmente con un botón
 
 jobs:
-  scrape-and-commit:
+  buscar_empleos:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Descargar código del repositorio
+      uses: actions/checkout@v3
 
-      - name: Ejecutar Apify y descargar resultados
-        env:
-          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
-        run: |
-          echo "Iniciando extracción de vacantes en Apify..."
-          curl -s -X POST "https://api.apify.com/v2/acts/ODjLELZDsPsgZV8sA/run-sync-get-dataset-items?token=$APIFY_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d @apify-input.json \
-            > vacantes.json
-          echo "Extracción finalizada."
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+    - name: Configurar entorno Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
 
-      - name: Extraer de Google Jobs vía SerpApi
-        env:
-          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
-        run: node google-jobs.js
+    - name: Ejecutar script de JSearch
+      env:
+        RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+      run: node jsearch-jobs.js
 
-      - name: Commit y Push al repositorio
-        run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
-          git add .
-          git diff --quiet && git diff --staged --quiet || git commit -m "Actualización de vacantes automatizada"
-          git push
+    - name: Guardar y subir el archivo de vacantes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add vacantes_jsearch.json
+        git commit -m "Actualización automática de vacantes JSearch" || echo "No hay vacantes nuevas para actualizar"
+        git push
