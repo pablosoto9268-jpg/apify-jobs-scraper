@@ -22,11 +22,20 @@ jobs:
             -d @apify-input.json \
             > vacantes.json
           echo "Extracción finalizada."
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Extraer de Google Jobs vía SerpApi
+        env:
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+        run: node google-jobs.js
 
       - name: Commit y Push al repositorio
         run: |
           git config --global user.name "GitHub Actions Bot"
           git config --global user.email "actions@github.com"
-          git add vacantes.json
+          git add .
           git diff --quiet && git diff --staged --quiet || git commit -m "Actualización de vacantes automatizada"
           git push
