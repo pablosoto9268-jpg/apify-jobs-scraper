@@ -1,0 +1,32 @@
+name: Apify Jobs Scraper Automation
+
+on:
+  schedule:
+    - cron: '0 8 * * 1' # Ejecución semanal (Lunes 8:00 AM)
+  workflow_dispatch: # Permite ejecución manual
+
+jobs:
+  scrape-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ejecutar Apify y descargar resultados
+        env:
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+        run: |
+          echo "Iniciando extracción de vacantes en Apify..."
+          curl -s -X POST "https://api.apify.com/v2/acts/ODjLELZDsPsgZV8sA/run-sync-get-dataset-items?token=$APIFY_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d @apify-input.json \
+            > vacantes.json
+          echo "Extracción finalizada."
+
+      - name: Commit y Push al repositorio
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add vacantes.json
+          git diff --quiet && git diff --staged --quiet || git commit -m "Actualización de vacantes automatizada"
+          git push
